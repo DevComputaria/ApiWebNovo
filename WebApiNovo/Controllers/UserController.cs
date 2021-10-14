@@ -15,23 +15,68 @@ namespace WebApiNovo.Controllers
     public class UserController : Controller
     {
         [HttpGet]
-        [Route("")]
-        //[Authorize(Roles = "manager")]
-        public async Task<ActionResult<List<User>>> Get([FromServices] DataContext context)
+        [Route("{id:int}")]
+        [Authorize(Roles = "manager")]
+        public async Task<ActionResult<User>> Get([FromRoute] int id, [FromServices] DataContext context)
         {
-            var users = await context
+            var user = context
                   .Users
                   .AsNoTracking()
-                  .ToListAsync();
-            return users;
+                  .Where(u => u.Id == id)
+                  .FirstOrDefault();
 
+            return user;
         }
+
+        [HttpGet("All")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Get([FromServices] DataContext context)
+        {
+            var users = context
+                  .Users
+                  .AsNoTracking()
+                  .ToList();
+
+            return Ok(users);
+        }
+
+        // Para criar usuário manager
+        //[HttpPost]
+        //[Route("manager")]
+        ////[AllowAnonymous]
+        //[Authorize(Roles = "manager")]
+        //public async Task<ActionResult<User>> Post(
+        // [FromServices] DataContext context,
+        // [FromBody] User model)
+        //{
+        //    // Verifica se o dados são válidos
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    try
+        //    {
+        //        context.Users.Add(model);
+        //        await context.SaveChangesAsync();
+        //        return model;
+
+        //    }
+        //    catch (Exception e)
+        //    {
+
+        //        var exception = e;
+        //        return BadRequest(new { message = "Não foi possivel criar o usuário" });
+
+
+        //    }
+
+
+        //}
 
 
         [HttpPost]
         [Route("")]
         [AllowAnonymous]
-        // [Authorize(Roles = "manager")]
+        //[Authorize(Roles = "manager")]
         public async Task<ActionResult<User>> Post(
          [FromServices] DataContext context,
          [FromBody] User model)
@@ -41,16 +86,19 @@ namespace WebApiNovo.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+
             try
             {
                 //Forçar o usuário a ser sempre "funcionário"
                 model.Role = "employee";
+                model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
 
                 context.Users.Add(model);
                 await context.SaveChangesAsync();
 
                 //Esconder a senha
-                model.Password = "";   
+                model.Password = "";
                 return model;
 
             }
@@ -74,6 +122,7 @@ namespace WebApiNovo.Controllers
             int id,
             [FromBody] User model)
         {
+            // Varifica se os dados são válidos
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 

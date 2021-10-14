@@ -21,10 +21,8 @@ namespace WebApiNovo.Services
                     new Claim(ClaimTypes.Role, user.Role.ToString())
 
                 }),
-                Expires = DateTime.Now.AddHours(2),
+                Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-
-
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);         
             return tokenHandler.WriteToken(token);

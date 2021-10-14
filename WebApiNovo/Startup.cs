@@ -55,7 +55,10 @@ namespace WebApiNovo
 
             //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
-           
+
+            services.AddMvcCore()
+            .AddAuthorization(); // Note - this is on the IMvcBuilder, not the service collection
+    //.AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiNovo", Version = "v1" });

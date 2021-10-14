@@ -8,15 +8,16 @@ namespace WebApiNovo.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [MaxLength(100, ErrorMessage = "Este campo deve conter entre 3 e 100 caracteres")]
+        [MinLength(3, ErrorMessage = "Este campo deve conter entre 3 e 60 caracteres")]
+        public string FullName { get; set; }
 
         [Required(ErrorMessage = "Este campo é obrigatório")]
         [MaxLength(20, ErrorMessage = "Este campo deve conter entre 3 e 20 caracteres")]
         [MinLength(3, ErrorMessage = "Este campo deve conter entre 3 e 60 caracteres")]
         public string UserName { get; set; }
 
-        [MaxLength(20, ErrorMessage = "Este campo deve conter entre 3 e 20 caracteres")]
-        [MinLength(3, ErrorMessage = "Este campo deve conter entre 3 e 60 caracteres")]
-        public string FullName { get; set; }
+        public string Email { get; set; }
 
         [Required(ErrorMessage = "Este campo é obrigatório")]
         [MaxLength(20, ErrorMessage = "Este campo deve conter entre 3 e 60 caracteres")]
