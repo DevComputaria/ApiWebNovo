@@ -170,6 +170,9 @@ namespace WebApiNovo.Controllers
         [HttpDelete]
         [Route("{id:int}")]
         //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "manager")]
 
         public async Task<ActionResult<List<User>>> Delete(
             int id,
