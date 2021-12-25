@@ -15,6 +15,6 @@ namespace WebApiNovo.Models
         [DataType("nvachar")]
         public string Title { get; set; }
         ICollection<Product> Products { get; set; }
-        //public int ProductId { get; set; }
+        public int ProductId { get; set; }
     }
 }
